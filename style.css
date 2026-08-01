@@ -1,45 +1,57 @@
 body {
   font-family: Arial, sans-serif;
+  margin: 0;
+  background: linear-gradient(to bottom, #0c0a8a, #010f1e);
+  color: white;
   text-align: center;
-  background: linear-gradient(to bottom, #a4cbdb, #004080);
-  color: rgb(241, 240, 243);
 }
 
-#start-screen {
+/* Sections */
+section {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  text-align: center;
-  
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-#game-Logo {
-    width: 200px;
-    height: auto;
-    margin-bottom: 0px;
-   
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.95);
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
 }
 
-input[type="text"] {
-  padding: 10px;
-  font-size: 16px;
+/* Logo */
+#game-logo {
+  width: 200px;
+  height: auto;
+  margin-bottom:0px;
+}
+
+/* Tap banner */
+.tap-banner {
+  background: #664ae4;
+  color: #f9f5f5;
+  padding: 10px 20px;
+  border-radius: 8px;
   margin: 15px 0;
-  border-radius: 6px;
-  border: none;
-  width: 220px;
-  text-align: center;
+  font-weight: bold;
+  animation: pulse 1.5s infinite;
 }
 
-.button-group {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
+/* Buttons */
 button {
-  
   padding: 12px 24px;
   font-size: 16px;
   border: none;
@@ -52,10 +64,120 @@ button {
 
 button:hover {
   transform: scale(1.1);
-  background-color: #142994;
+  background-color: #1a36b0;
+}
+
+#submit-quiz {
+  font-weight: bold;
+  margin-top: 20px;
+  background-color: #4c097b;
+}
+
+/* Controls (icons) */
+#left-controls {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+#right-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.icon-btn:hover {
+  transform: scale(1.3);
 }
 
 #scoreboard {
-  margin-top: 20px;
-  font-size: 18px;
+  margin: 1px 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ebe9f2;
 }
+
+#eligibility-quiz {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* content starts from top */
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.question {
+  margin:  0;
+}
+
+.option-container {
+    display: flex;
+    flex-direction: column; 
+    gap: 5px;
+    width: 100%;
+    max-width: 400px;
+  margin: 10px 0;
+}
+
+.quiz-option {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #f7f8fb;
+    border-radius: 6px; 
+    font-size: 16px;
+    cursor: pointer;    
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* Next icon styling */
+#next-container {
+    position: absolute;
+    bottom: 0px;
+    right: 20px;
+    z-index: 999;
+  
+}
+
+#next-icon {
+  width: 50px;
+  height: auto;
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.2s;
+}
+
+#next-icon:hover {
+  transform: scale(1.2);
+}
+
+/* Moving image animation at bottom */
+#moving-image-container {
+  position: relative;
+  width: 100%;
+  min-height: 150px; /* adjust height space for animation */
+  margin: 0;
+  overflow: visible; /* allow image to move outside container */
+}
+
+#moving-image {
+  width: 80px;
+  height: auto;
+  position: absolute;
+  top: 20px;
+  animation: moveAcross 6s infinite normal linear;
+}
+
+@keyframes moveAcross {
+  from { left: 0; }              /* start at left edge */
+  to   { left: calc(100% - 80px); } /* move to right edge minus image width */
+}
+

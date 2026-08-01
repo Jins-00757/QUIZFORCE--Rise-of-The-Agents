@@ -8,40 +8,71 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Start Screen -->
+  <section id="start-screen">
+    <!-- Left controls -->
+    <div id="left-controls">
+      <img id="volume-icon" src="./icons/audioOff.png" alt="Volume Icon" class="icon-btn">
+    </div>
+
+    <!-- Right controls -->
+    <div id="right-controls">
+      <img id="close-icon" src="./icons/cross.png" alt="Close Icon" class="icon-btn">
+    </div>
+
+    <!-- Logo and banner -->
+    <img src="./images/sf-quiz-logo.png" alt="Quizforce Logo" id="game-logo">
+    <h1>Quizforce: Rise of the Agents</h1>
+    <p class="subtitle">Test your Salesforce knowledge!</p>
+    <div class="tap-banner">Tap to Begin</div>
+    <button id="start-btn">Start Quiz</button>
+  </section>
+
+  <!-- Eligibility Quiz -->
+ <section id="eligibility-quiz" class="hidden">
+    <h2>Eligibility Quiz</h2>
+
+    <!-- Next icon -->
+  <div id="next-container">
+    <img src="./icons/next.png" alt="Next Icon" id="next-icon">
+  </div>
      
 
-    <div id="start-screen">
-        
-        <h1>Quizforce: Rise of the Agents</h1>
-       
-        <p>Test your Salesforce knowledge</p>
+    <!-- <p>Answer at least 2 out of 3 questions correctly to unlock the main game.</p>-->
 
-        <input type="text" id="player-name" placeholder="Enter your name">
-        
-    <div class="button-group"> 
-        <button id="start-btn">Start Quiz</button>
-        <button id="restart-btn">Restart Quiz</button>
-        </div>
+    <div id="scoreboard">
+      <p>Score: <span id="score">0</span>/3</p>
     </div>
+
+    <div class="question active">
+      <p><strong>Q1:</strong> Salesforce is primarily a platform for…</p>
+      <button class="quiz-option" data-correct="true">Customer Relationship Management (CRM)</button>
+      <button class="quiz-option">Video Streaming</button>
+      <button class="quiz-option">Food Delivery</button>
+    </div>
+
+    <!-- Next icon -->
+  <div id="next-container">
+    <img src="./icons/next.png" alt="Next Icon" id="next-icon">
+  </div>
 
    
 
-    <div id="quiz-area" style="display:none;">
-        <h2>Eligibility Quiz</h2>
-        <p id="welcome-msg"></p>
-        <p>Questions will appear here....</p>
-        <button id="next-btn">Next Question</button>
+    <button id="submit-quiz">Submit Answers</button>
+
+    <div id="moving-image-container">
+    <img src="./images/Astro.png" alt="Mascot" id="moving-image">
     </div>
+  </section>
 
-   
+  <!-- Main Game -->
+  <section id="main-game" class="hidden">
+    <h2>Welcome to the Main Game!</h2>
+    <p>You unlocked the adventure. Let’s begin!</p>
+  </section>
 
-    <div id="scoreboard" style="display:none;">
-        <p>Score: <span id="score">0</span> </p>
-         <p>Lives: <span id="score">5</span> </p>
-          <p>Level: <span id="score">Eligibility</span> </p>
-    </div>
-
-    <script src="script.js"></script>
-    
+  <!-- Background audio -->
+  <audio id="bg-audio" src="background-music.mp3" loop></audio>
 </body>
+<script src="script.js"></script>   
 </html>
