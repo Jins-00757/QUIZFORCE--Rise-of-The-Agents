@@ -1,183 +1,261 @@
+/* ===========================
+   GLOBAL PAGE STYLING
+=========================== */
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background: linear-gradient(to bottom, #0c0a8a, #010f1e);
-  color: white;
-  text-align: center;
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #090866, #000306);
+    color: #ffffff;
+    text-align: center;
+    overflow-x: hidden;
 }
 
-/* Sections */
 section {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.95);
-  position: absolute;
-  width: 100%;
-  top: 0;
-  left: 0;
+    display: none !important;
 }
 
-/* Logo */
+
+
+/* ===========================
+   START SCREEN
+=========================== */
+#start-screen {
+    position: relative;
+}
+
 #game-logo {
-  width: 200px;
-  height: auto;
-  margin-bottom:0px;
+    width: 200px;
+    margin-bottom: 10px;
 }
 
-/* Tap banner */
-.tap-banner {
-  background: #664ae4;
-  color: #f9f5f5;
-  padding: 10px 20px;
-  border-radius: 8px;
-  margin: 15px 0;
-  font-weight: bold;
-  animation: pulse 1.5s infinite;
+.subtitle {
+    margin-top: -10px;
+    font-size: 18px;
+    opacity: 0.9;
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.7; }
-  100% { transform: scale(1); opacity: 1; }
+/* Floating animated agents */
+.animated-img {
+    position: absolute;
+    width: 80px;
+    opacity: 0.4;
+    animation: floatAround 6s infinite alternate ease-in-out;
 }
 
-/* Buttons */
+@keyframes floatAround {
+    from { transform: translate(0, 0); }
+    to   { transform: translate(200px, 400px); }
+}
+
+/* Player name input */
+#player-name {
+    padding: 12px;
+    font-size: 16px;
+    margin: 20px 0;
+    border-radius: 6px;
+    border: none;
+    width: 240px;
+    text-align: center;
+    outline: none;
+}
+
+#player-name::placeholder {
+    color: #ccc;
+    font-style: italic;
+}
+
+
+/* ===========================
+   BUTTONS
+=========================== */
 button {
-  padding: 12px 24px;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background-color: #142994;
-  color: #faf5f5;
-  transition: transform 0.2s;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #142994;
+    color: #faf5f5;
+    transition: transform 0.2s, background-color 0.2s;
 }
 
 button:hover {
-  transform: scale(1.1);
-  background-color: #1a36b0;
+    transform: scale(1.1);
+    background-color: #1a36b0;
 }
 
-#submit-quiz {
-  font-weight: bold;
-  margin-top: 20px;
-  background-color: #4c097b;
-}
 
-/* Controls (icons) */
-#left-controls {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-}
-
+/* ===========================
+   TOP CONTROL ICONS
+=========================== */
+#left-controls,
 #right-controls {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+    position: absolute;
+    top: 20px;
 }
+
+#left-controls { left: 20px; }
+#right-controls { right: 20px; }
 
 .icon-btn {
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  transition: transform 0.2s;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: transform 0.2s;
 }
 
 .icon-btn:hover {
-  transform: scale(1.3);
+    transform: scale(1.3);
+}
+
+
+/* ===========================
+   ELIGIBILITY QUIZ
+=========================== */
+#eligibility-quiz {
+    padding-top: 40px;
 }
 
 #scoreboard {
-  margin: 1px 0;
-  font-size: 20px;
-  font-weight: bold;
-  color: #ebe9f2;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
-#eligibility-quiz {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start; /* content starts from top */
-  transition: opacity 0.6s ease, transform 0.6s ease;
+.question-wrapper {
+    width: 90%;
+    max-width: 450px;
+    margin: 0 auto;
 }
 
 .question {
-  margin:  0;
+    display: none;
+    margin: 20px auto;
+    width: 100%;
 }
 
-.option-container {
-    display: flex;
-    flex-direction: column; 
-    gap: 5px;
-    width: 100%;
-    max-width: 400px;
-  margin: 10px 0;
+.question.active {
+    display: block;
 }
 
 .quiz-option {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #f7f8fb;
-    border-radius: 6px; 
-    font-size: 16px;
-    cursor: pointer;    
-    text-align: center;
+    padding: 12px;
     margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #fff;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
-/* Next icon styling */
-#next-container {
-    position: absolute;
-    bottom: 0px;
-    right: 20px;
+.quiz-option:hover {
+    background: #5e90ce;
+}
+
+.quiz-option.selected {
+    background: #1a36b0;
+}
+
+.submit-btn {
+    margin-top: 10px;
+    background: #01101e;
+}
+
+.submit-btn:hover {
+    background: #024181;
+}
+
+
+/* ===========================
+   POPUP MODAL
+=========================== */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 999;
-  
 }
 
-#next-icon {
-  width: 50px;
-  height: auto;
-  cursor: pointer;
-  z-index: 1000;
-  transition: transform 0.2s;
+.popup-content {
+    background: #fff;
+    color: #000;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+    position: relative;
 }
 
-#next-icon:hover {
-  transform: scale(1.2);
+#popup-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
 }
 
-/* Moving image animation at bottom */
-#moving-image-container {
-  position: relative;
-  width: 100%;
-  min-height: 150px; /* adjust height space for animation */
-  margin: 0;
-  overflow: visible; /* allow image to move outside container */
+
+/* ===========================
+   MAIN GAME
+=========================== */
+#sections {
+    margin: 20px 0;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.section-btn {
+    background: #0070d2;
+    color: #fff;
+}
+
+.section-btn:hover {
+    background: #005bb5;
+}
+
+#quiz-container {
+    margin-top: 20px;
+    width: 90%;
+    max-width: 450px;
+}
+
+#game-content {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+/* ===========================
+   FLOATING IMAGES
+=========================== */
+@keyframes moveAcross {
+    from { left: 0; }
+    to   { left: calc(100% - 80px); }
 }
 
 #moving-image {
-  width: 80px;
-  height: auto;
-  position: absolute;
-  top: 20px;
-  animation: moveAcross 6s infinite normal linear;
+    width: 80px;
+    position: absolute;
+    top: 20px;
+    animation: moveAcross 6s infinite linear;
 }
-
-@keyframes moveAcross {
-  from { left: 0; }              /* start at left edge */
-  to   { left: calc(100% - 80px); } /* move to right edge minus image width */
-}
-

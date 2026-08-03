@@ -3,76 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Quizforce: Rise of the Agents</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
-  <!-- Start Screen -->
-  <section id="start-screen">
-    <!-- Left controls -->
+
+<!-- ===========================
+      START SCREEN
+=========================== -->
+<section id="start-screen">
+
+    <!-- Top Controls -->
     <div id="left-controls">
-      <img id="volume-icon" src="./icons/audioOff.png" alt="Volume Icon" class="icon-btn">
+        <img id="volume-icon" src="./icons/audioOff.png" alt="Volume Icon" class="icon-btn">
     </div>
 
-    <!-- Right controls -->
     <div id="right-controls">
-      <img id="close-icon" src="./icons/cross.png" alt="Close Icon" class="icon-btn">
+        <img id="close-icon" src="./icons/cross.png" alt="Close Icon" class="icon-btn">
     </div>
 
-    <!-- Logo and banner -->
+    <!-- Logo + Title -->
     <img src="./images/sf-quiz-logo.png" alt="Quizforce Logo" id="game-logo">
     <h1>Quizforce: Rise of the Agents</h1>
     <p class="subtitle">Test your Salesforce knowledge!</p>
-    <div class="tap-banner">Tap to Begin</div>
+
+    <!-- Animated Floating Agents -->
+    <img src="./images/agentforce_agent-1.png" class="animated-img" id="img1">
+    <img src="./images/agentforce_agent-1.png" class="animated-img" id="img2">
+    <img src="./images/agentforce_agent-1.png" class="animated-img" id="img3">
+    <img src="./images/agentforce_agent-1.png" class="animated-img" id="img4">
+    <img src="./images/agentforce_agent-1.png" class="animated-img" id="img5">
+    <img src="./images/agentforce_agent-1.png" class="animated-img" id="img6">
+
+    <!-- Player Name -->
+    <input type="text" id="player-name" placeholder="Enter Player Name">
     <button id="start-btn">Start Quiz</button>
-  </section>
 
-  <!-- Eligibility Quiz -->
- <section id="eligibility-quiz" class="hidden">
-    <h2>Eligibility Quiz</h2>
+</section>
 
-    <!-- Next icon -->
-  <div id="next-container">
-    <img src="./icons/next.png" alt="Next Icon" id="next-icon">
-  </div>
-     
 
-    <!-- <p>Answer at least 2 out of 3 questions correctly to unlock the main game.</p>-->
+
+<!-- ===========================
+      ELIGIBILITY QUIZ
+=========================== -->
+<section id="eligibility-quiz" class="hidden">
+
+    <h2 id="eligibility-title">Eligibility Quiz</h2>
 
     <div id="scoreboard">
-      <p>Score: <span id="score">0</span>/3</p>
+        <p>Score: <span id="score">0</span>/5</p>
     </div>
 
-    <div class="question active">
-      <p><strong>Q1:</strong> Salesforce is primarily a platform for…</p>
-      <button class="quiz-option" data-correct="true">Customer Relationship Management (CRM)</button>
-      <button class="quiz-option">Video Streaming</button>
-      <button class="quiz-option">Food Delivery</button>
-    </div>
-
-    <!-- Next icon -->
-  <div id="next-container">
-    <img src="./icons/next.png" alt="Next Icon" id="next-icon">
-  </div>
-
-   
+    <!-- Dynamic questions injected here -->
+    <div id="eligibility-questions" class="question-wrapper"></div>
 
     <button id="submit-quiz">Submit Answers</button>
 
-    <div id="moving-image-container">
-    <img src="./images/Astro.png" alt="Mascot" id="moving-image">
+</section>
+
+
+
+<!-- ===========================
+      POPUP MODAL
+=========================== -->
+<div id="popup" class="popup hidden">
+    <div class="popup-content">
+        <span id="popup-close">&times;</span>
+        <h3 id="popup-title"></h3>
+        <p id="popup-message"></p>
+        <button id="popup-ok">OK</button>
     </div>
-  </section>
+</div>
 
-  <!-- Main Game -->
-  <section id="main-game" class="hidden">
+
+
+<!-- ===========================
+      MAIN GAME
+=========================== -->
+<section id="main-game" class="hidden">
+
     <h2>Welcome to the Main Game!</h2>
-    <p>You unlocked the adventure. Let’s begin!</p>
-  </section>
+    <p>Select your Section to level up:</p>
 
-  <!-- Background audio -->
-  <audio id="bg-audio" src="background-music.mp3" loop></audio>
+    <div id="sections">
+        <button class="section-btn" data-section="admin">ADMIN</button>
+        <button class="section-btn" data-section="lwc">LWC</button>
+        <button class="section-btn" data-section="integration">INTEGRATION</button>
+        <button class="section-btn" data-section="triggers">TRIGGERS</button>
+        <button class="section-btn" data-section="apex">APEX</button>
+    </div>
+
+    <!-- Dynamic quiz container -->
+    <div id="quiz-container"></div>
+
+    <!-- Scoreboard -->
+    <div id="game-content"></div>
+
+</section>
+
+
+
+<!-- Background Audio -->
+<audio id="bg-audio" src="background-music.mp3" loop></audio>
+
+ <script src="script.js"></script> 
+
 </body>
-<script src="script.js"></script>   
 </html>
