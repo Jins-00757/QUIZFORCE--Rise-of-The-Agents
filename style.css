@@ -431,6 +431,14 @@ button:hover {
     font-weight: bold;
 }
 
+#main-game {
+  background-image:url("./assets/images/quiz-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.95;
+    
+}
 
 /* ===========================
    FLOATING IMAGES

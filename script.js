@@ -505,15 +505,15 @@ const incorrectSound = new Audio("./assets/music/Wrong answer.wav");
 // Play correct and wrong answer sounds
 function playCorrect() {
     if (!audio.muted) {
-        correctSound.currentTime = 0;
-        correctSound.play();
+        correctAudio.currentTime = 0;
+        correctAudio.play();
     }
 }
 
 function playWrong() {
     if (!audio.muted) {
-        incorrectSound.currentTime = 0;
-        incorrectSound.play();
+        incorrectAudio.currentTime = 0;
+        incorrectAudio.play();
     }
 }
 
