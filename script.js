@@ -45,10 +45,11 @@ const floatImages = [
 /* ===========================
    GLOBAL VARIABLES
 =========================== */
-let score = 0;
+let finalScore = 0;
 let currentQuestionIndex = 0;
 let currentSection = "";
 let currentSectionIndex = 0;
+let sectionScore = 0;
 
 
 /* ===========================
@@ -71,6 +72,57 @@ const sectionQuizzes = {
         { q: "A Page Layout controls:", options: ["Field Arrangement", "Database Size", "API Calls"], correct: "Field Arrangement" },
         { q: "Sharing Rules grant:", options: ["Additional Access", "Storage Increase", "New UI Themes"], correct: "Additional Access" }
     ],
+
+    Development: [
+  {
+    q: "Which statement about Apex governor limits is true?",
+    options: [
+      "They only apply in sandbox orgs",
+      "They are per-transaction limits enforced by the platform",
+      "They can be disabled via org settings",
+      "They only affect UI operations"
+    ], correct: "They are per-transaction limits enforced by the platform" },
+
+  {
+    q: "Which SOQL clause is used to filter records returned from a query?",
+    options: [
+      "ORDER BY",
+      "GROUP BY",
+      "WHERE",
+      "HAVING"
+    ], correct: "WHERE" },
+
+  {
+    q: "In Apex triggers, when should you use a 'before insert' trigger?",
+    options: [
+      "To send outbound messages after record creation",
+      "To modify or validate field values before the record is saved",
+      "To access system-generated Ids of the new records",
+      "To run long-running batch jobs"
+    ],correct: "To modify or validate field values before the record is saved",
+    
+  },
+
+  {
+    q: "Which of the following is the recommended way for an LWC to call an Apex method?",
+    options: [
+      "Use window.fetch to call Apex directly",
+      "Import the Apex method and call it via @wire or imperative call",
+      "Use Visualforce remoting from the component",
+      "Embed Apex code inside the component's HTML"
+    ], correct: "Import the Apex method and call it via @wire or imperative call"},
+
+  {
+    q: "Which integration pattern is best when you need to expose Salesforce data to an external system in near real-time?",
+    options: [
+      "Batch Apex scheduled nightly",
+      "Outbound Message or Platform Events / Streaming API",
+      "Manual CSV export",
+      "Static site hosting"
+    ],
+    correct: "Outbound Message or Platform Events / Streaming API"}
+    
+  ],
 
     lwc: [
         { q: "LWC stands for:", options: ["Lightning Web Components", "Local Web Cache", "Logical Web Compiler"], correct: "Lightning Web Components" },
@@ -112,13 +164,19 @@ const sectionQuizzes = {
 function showPopup(title, message, onOk = null) {
     popupTitle.textContent = title;
     popupMessage.textContent = message;
+
     popup.classList.remove("hidden");
 
-    popupOk.onclick = () => {
+    const newOk = popupOk.cloneNode(true);
+    popupOk.parentNode.replaceChild(newOk, popupOk);
+    popupOk = newOk;
+
+    popupOk.addEventListener("click", () => {
         popup.classList.add("hidden");
         if (onOk) onOk();
-    }
+    });
 }
+
 
 popupClose.addEventListener("click", () => popup.classList.add("hidden"));
 
@@ -135,6 +193,8 @@ function switchScreen(hideSection, showSection) {
 /* ===========================
    START QUIZ BUTTON
 =========================== */
+
+
 startBtn.addEventListener("click", () => {
     const playerName = playerNameInput.value.trim();
 
@@ -143,13 +203,14 @@ startBtn.addEventListener("click", () => {
         return;
     }
 
-    document.querySelector("#eligibility-title").textContent =
-        `Welcome, ${playerName}! Eligibility Quiz`;
+    //document.querySelector("eligibility-quiz").textContent =
+    //    `Welcome, ${playerName}! Eligibility Quiz`;
 
-    showPopup("Welcome", `Welcome, ${playerName}! Let's start the quiz.`, () => {
-        switchScreen(startScreen, quizScreen);
+    //showPopup("Welcome", `Welcome, ${playerName}! Let's start the quiz.`, () => {
+    //    console.log(`ok clicked, startScreen: ${startScreen.id}, quizScreen: ${quizScreen.id}`);
+    //});
+    switchScreen(startScreen, quizScreen);
         loadEligibilityQuiz();
-    });
 });
 
 
@@ -158,7 +219,7 @@ startBtn.addEventListener("click", () => {
 =========================== */
 function loadEligibilityQuiz() {
     eligibilityQuestionsContainer.innerHTML = "";
-    score = 0;
+    finalScore = 0;
     currentQuestionIndex = 0;
 
     eligibilityQuiz.forEach((item, index) => {
@@ -186,9 +247,9 @@ function loadEligibilityQuiz() {
 
         submitBtn.addEventListener("click", () => {
             const selected = block.querySelector(".selected");
-            if (selected && selected.textContent === item.correct) score++;
+            if (selected && selected.textContent === item.correct) finalScore++;
 
-            scoreDisplay.textContent = score;
+            scoreDisplay.textContent = finalScore;
 
             block.classList.remove("active");
             currentQuestionIndex++;
@@ -201,25 +262,55 @@ function loadEligibilityQuiz() {
         });
     });
 }
+//calculate eligibility score
+function calculateEligibilityScore() {
+    let finalScore = 0;
+    const selectedOptions = document.querySelectorAll(".quiz-option.selected");
+
+    selectedOptions.forEach(option => {
+        if (option.dataset.correct === "true") {
+            finalScore++;
+        }
+    });
+
+    return finalScore;
+}
 
 
 /* ===========================
    FINISH ELIGIBILITY QUIZ
 =========================== */
+// finishEligibilityQuiz: switch immediately to main game and show popup (non-blocking)
 function finishEligibilityQuiz() {
-    if (score >= 3) {
-        showPopup(
-            "Quiz Passed",
-            `Great job! You scored ${score}/5 and unlocked the Main Game.`,
-            () => switchScreen(quizScreen, mainGame)
-        );
-    } else {
-        showPopup(
-            "Quiz Failed",
-            `You scored ${score}/5. You need at least 3 correct to unlock the Main Game.`
-        );
-    }
+    console.log("Finishing quiz...");
+
+    const finalScore = calculateEligibilityScore();
+    scoreDisplay.textContent = finalScore;
+
+    // Switch to main game immediately
+    switchScreen(quizScreen, mainGame);
+
+    // Show a non-blocking popup with the result
+    showPopup("Quiz Completed You are Eligible!", `Your score is ${finalScore}/${eligibilityQuiz.length}`);
 }
+
+// Submit Quiz button: switch to main game right away when clicked
+submitQuiz.addEventListener("click", () => {
+    console.log("Submit clicked");
+
+    const finalScore = calculateEligibilityScore();
+    console.log("Score:", finalScore);
+
+    // Update score display
+    scoreDisplay.textContent = finalScore;
+
+    // Immediately navigate to main game
+    switchScreen(quizScreen, mainGame);
+
+    // Optionally show the popup (does not block navigation)
+    showPopup("Quiz Completed You are Eligible!", `Your score is ${finalScore}/${eligibilityQuiz.length}`);
+});
+
 
 
 /* ===========================
@@ -269,9 +360,11 @@ function loadSectionQuiz(section) {
                 if (option.textContent === item.correct) {
                     sectionScore++;
                     gameContent.textContent = `Score: ${sectionScore} / ${quiz.length}`;
-                    option.style.background = "#c8e6c9";
+                    option.style.background = "#026006";
+                    option.style.color = "#81d185";
                 } else {
-                    option.style.background = "#ffcdd2";
+                    option.style.background = "#ed0b22";
+                    option.style.color = "#e1aeae";
                 }
 
                 // Move to next question
@@ -291,11 +384,11 @@ function loadSectionQuiz(section) {
 }
 
 
-function showSectionSubmitButton(score, total) {
+function showSectionSubmitButton(sectionScore, total) {
     quizContainer.innerHTML = `
         <h3>Section Completed!</h3>
-        <p>Your Score: ${score} / ${total}</p>
-        <button id="section-submit-btn">Submit</button>
+        <p>Your Score: ${sectionScore} / ${total}</p>
+        <button id="section-submit-btn">Submit Quiz</button>
     `;
 
     document.getElementById("section-submit-btn").addEventListener("click", () => {
@@ -305,6 +398,33 @@ function showSectionSubmitButton(score, total) {
         showPopup("Success", "Section completed! Choose another section.");
     });
 }
+
+
+// Add ripple/highlight on click and keep existing dataset.section behavior
+document.querySelectorAll('.section-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    // small pulse effect
+    btn.animate([
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.98)', opacity: 0.98 },
+      { transform: 'scale(1)', opacity: 1 }
+    ], { duration: 260, easing: 'cubic-bezier(.2,.9,.3,1)' });
+
+    // optional: temporary outline to show selection
+    btn.style.boxShadow = '0 18px 40px rgba(20,20,40,0.18)';
+    setTimeout(() => btn.style.boxShadow = '', 420);
+
+    // preserve your existing behavior: set currentSection and load quiz
+    const section = btn.dataset.section;
+    if (section) {
+      currentSection = section;
+      currentSectionIndex = 0;
+      quizContainer.innerHTML = '';
+      gameContent.textContent = '';
+      loadSectionQuiz(currentSection);
+    }
+  });
+});
 
 
 

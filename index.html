@@ -25,7 +25,7 @@
 
     <!-- Logo + Title -->
     <img src="./images/sf-quiz-logo.png" alt="Quizforce Logo" id="game-logo">
-    <h1>Quizforce: Rise of the Agents</h1>
+    <h1 id="game-title">Quizforce: Rise of the Agents</h1>
     <p class="subtitle">Test your Salesforce knowledge!</p>
 
     <!-- Animated Floating Agents -->
@@ -49,7 +49,7 @@
 =========================== -->
 <section id="eligibility-quiz" class="hidden">
 
-    <h2 id="eligibility-title">Eligibility Quiz</h2>
+    <h2>Eligibility Quiz</h2>
 
     <div id="scoreboard">
         <p>Score: <span id="score">0</span>/5</p>
@@ -58,7 +58,7 @@
     <!-- Dynamic questions injected here -->
     <div id="eligibility-questions" class="question-wrapper"></div>
 
-    <button id="submit-quiz">Submit Answers</button>
+    <button id="submit-quiz">Submit Quiz</button>
 
 </section>
 
@@ -86,13 +86,37 @@
     <h2>Welcome to the Main Game!</h2>
     <p>Select your Section to level up:</p>
 
-    <div id="sections">
-        <button class="section-btn" data-section="admin">ADMIN</button>
-        <button class="section-btn" data-section="lwc">LWC</button>
-        <button class="section-btn" data-section="integration">INTEGRATION</button>
-        <button class="section-btn" data-section="triggers">TRIGGERS</button>
-        <button class="section-btn" data-section="apex">APEX</button>
-    </div>
+    <div class="section-btns-wrapper">
+  <button class="section-btn animate" data-section="admin" data-variant="ocean">
+    <span class="label">Admin</span>
+    
+  </button>
+  <button class="section-btn" data-section="Development" data-variant="violet">
+    <span class="label">Development</span>
+    
+  </button>
+
+  <button class="section-btn" data-section="lwc" data-variant="violet">
+    <span class="label">LWC</span>
+    
+  </button>
+
+  <button class="section-btn" data-section="integration" data-variant="sunset">
+    <span class="label">Integration</span>
+   
+  </button>
+
+  <button class="section-btn" data-section="triggers" data-variant="ocean">
+    <span class="label">Triggers</span>
+   
+  </button>
+
+  <button class="section-btn" data-section="apex" data-variant="violet">
+    <span class="label">Apex</span>
+   
+  </button>
+</div>
+
 
     <!-- Dynamic quiz container -->
     <div id="quiz-container"></div>
@@ -107,7 +131,7 @@
 <!-- Background Audio -->
 <audio id="bg-audio" src="background-music.mp3" loop></audio>
 
- <script src="script.js"></script> 
+ <script src="./script.js"></script> 
 
 </body>
 </html>
