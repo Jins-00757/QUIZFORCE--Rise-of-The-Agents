@@ -31,6 +31,10 @@ const audio = document.getElementById("bg-audio");
 const volumeIcon = document.getElementById("volume-icon");
 const closeIcon = document.getElementById("close-icon");
 
+// Game over screen
+const gameOverScreen = document.getElementById("game-over-screen");
+const restartBtn = document.getElementById("restart-btn");
+
 // Floating images
 const floatImages = [
     document.getElementById("img1"),
@@ -38,7 +42,8 @@ const floatImages = [
     document.getElementById("img3"),
     document.getElementById("img4"),
     document.getElementById("img5"),
-    document.getElementById("img6")
+    document.getElementById("img6"),
+    document.getElementById("img7")
 ];
 
 
@@ -284,7 +289,7 @@ function calculateEligibilityScore() {
 function finishEligibilityQuiz() {
     console.log("Finishing quiz...");
 
-    const finalScore = calculateEligibilityScore();
+    finalScore = calculateEligibilityScore();
     scoreDisplay.textContent = finalScore;
 
     // Switch to main game immediately
@@ -337,7 +342,9 @@ function loadSectionQuiz(section) {
     quizContainer.innerHTML = "";
     gameContent.textContent = `Score: 0 / ${quiz.length}`;
 
-    let sectionScore = 0;
+   // let sectionScore = 0;
+     let wrongAnswers = 0;
+
 
     quiz.forEach((item, index) => {
         const block = document.createElement("div");
@@ -365,7 +372,13 @@ function loadSectionQuiz(section) {
                 } else {
                     option.style.background = "#ed0b22";
                     option.style.color = "#e1aeae";
+                    wrongAnswers++;
                 }
+
+                if (wrongAnswers > 3) {
+            showGameOverScreen();
+            return; // stop quiz immediately
+        }
 
                 // Move to next question
                 setTimeout(() => {
@@ -426,7 +439,41 @@ document.querySelectorAll('.section-btn').forEach(btn => {
   });
 });
 
+//GAME OVER SCREEN
+function showGameOverScreen() {
+    quizContainer.innerHTML = `
+        <h2 style="color:#ff4444; text-shadow:0 0 10px red;">GAME OVER</h2>
+        <p>You got more than 3 answers wrong.</p>
+        <button id="restart-btn">Restart Game</button>
+    `;
 
+    document.getElementById("restart-btn").addEventListener("click", () => {
+        // Reset section UI
+        quizContainer.innerHTML = "";
+        gameContent.textContent = "";
+
+        // Navigate back to main game screen
+        switchScreen(mainGame, mainGame);
+
+        showPopup("Restarted", "You can choose a new section now!");
+    });
+}
+
+function showGameOver() {
+  gameOverScreen.classList.remove("hidden");
+}
+
+//RESTART BUTTON FUNCTIONALITY
+restartBtn.addEventListener("click", () => {
+  gameOverScreen.classList.add("hidden");
+
+  // reset quiz UI if needed
+  // e.g. quizContainer.innerHTML = "";
+  // gameContent.textContent = "";
+
+  // navigate back to main game
+  switchScreen(quizScreen, mainGameScreen);
+});
 
 /* ===========================
    AUDIO CONTROL
