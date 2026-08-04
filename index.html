@@ -1,153 +1,165 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quizforce: Rise of the Agents</title>
-    <link rel="stylesheet" href="./style.css">
-</head>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
 
-<body>
-
-<!-- ===========================
+  <body>
+    <!-- ===========================
       START SCREEN
 =========================== -->
-<section id="start-screen">
+    <section id="start-screen">
+      <!-- Top Controls -->
+      <div id="left-controls">
+        <img
+          id="volume-icon"
+          src="./assets/icons/audioOff.png"
+          alt="Volume Icon"
+          class="icon-btn"
+        />
+      </div>
 
-    <!-- Top Controls -->
-    <div id="left-controls">
-        <img id="volume-icon" src="./assets/icons/audioOff.png" alt="Volume Icon" class="icon-btn">
-    </div>
+      <div id="right-controls">
+        <img
+          id="close-icon"
+          src="./assets/icons/cross.png"
+          alt="Close Icon"
+          class="icon-btn"
+        />
+      </div>
 
-    <div id="right-controls">
-        <img id="close-icon" src="./assets/icons/cross.png" alt="Close Icon" class="icon-btn">
-    </div>
+      <!-- Logo + Title -->
+      <img
+        src="./assets/images/sf-quiz-logo.png"
+        alt="Quizforce Logo"
+        id="game-logo"
+      />
+      <h1 id="game-title">Quizforce: Rise of the Agents</h1>
+      <p class="subtitle">Test your Salesforce knowledge!</p>
 
-    <!-- Logo + Title -->
-    <img src="./assets/images/sf-quiz-logo.png" alt="Quizforce Logo" id="game-logo">
-    <h1 id="game-title">Quizforce: Rise of the Agents</h1>
-    <p class="subtitle">Test your Salesforce knowledge!</p>
+      <!-- Animated Floating Agents -->
+      <img
+        src="./assets/images/agentforce_agent-1.png"
+        class="animated-img"
+        id="img1"
+      />
+      <img src="./assets/images/Astro.png" class="animated-img" id="img2" />
+      <img src="./assets/images/Einstein.png" class="animated-img" id="img3" />
+      <img src="./assets/images/Ruth.png" class="animated-img" id="img4" />
+      <img src="./assets/images/Appy.png" class="animated-img" id="img5" />
+      <img src="./assets/images/Appy.png" class="animated-img" id="img6" />
+      <img src="./assets/images/Einstein.png" class="animated-img" id="img7" />
 
-    <!-- Animated Floating Agents -->
-    <img src="./assets/images/agentforce_agent-1.png" class="animated-img" id="img1">
-    <img src="./assets/images/Astro.png" class="animated-img" id="img2">
-    <img src="./assets/images/Einstein.png" class="animated-img" id="img3">
-    <img src="./assets/images/Ruth.png" class="animated-img" id="img4">
-    <img src="./assets/images/Appy.png" class="animated-img" id="img5">
-    <img src="./assets/images/Appy.png" class="animated-img" id="img6">
-    <img src="./assets/images/Einstein.png" class="animated-img" id="img7">
+      <!-- Player Name -->
+      <input type="text" id="player-name" placeholder="Enter Player Name" />
+      <button id="start-btn">Start Quiz</button>
+    </section>
 
-    <!-- Player Name -->
-    <input type="text" id="player-name" placeholder="Enter Player Name">
-    <button id="start-btn">Start Quiz</button>
-
-</section>
-
-
-
-<!-- ===========================
+    <!-- ===========================
       ELIGIBILITY QUIZ
 =========================== -->
-<section id="eligibility-quiz" class="hidden">
+    <section id="eligibility-quiz" class="hidden">
+      <h2>Eligibility Quiz</h2>
 
-    <h2>Eligibility Quiz</h2>
-
-    <div id="scoreboard">
+      <div id="scoreboard">
         <p>Score: <span id="score">0</span>/5</p>
-    </div>
 
-    <!-- Dynamic questions injected here -->
-    <div id="eligibility-questions" class="question-wrapper"></div>
+        <div class="mini-progress-bar">
+          <div class="mini-progress-fill" id="miniProgressFill"></div>
+        </div>
+      </div>
 
-    <button id="submit-quiz">Submit Quiz</button>
+      <!-- Dynamic questions injected here -->
+      <div id="eligibility-questions" class="question-wrapper"></div>
 
-</section>
+      <button id="submit-quiz">Submit Quiz</button>
+    </section>
 
-
-
-<!-- ===========================
+    <!-- ===========================
       POPUP MODAL
 =========================== -->
-<div id="popup" class="popup hidden">
-    <div class="popup-content">
+    <div id="popup" class="popup hidden">
+      <div class="popup-content">
         <span id="popup-close">&times;</span>
         <h3 id="popup-title"></h3>
         <p id="popup-message"></p>
         <button id="popup-ok">OK</button>
+      </div>
     </div>
-</div>
 
-
-
-<!-- ===========================
+    <!-- ===========================
       MAIN GAME
 =========================== -->
-<section id="main-game" class="hidden">
+    <section id="main-game" class="hidden">
+      <h2>Welcome to the Main Game!</h2>
+      <p>Select your Section to level up:</p>
 
-    <h2>Welcome to the Main Game!</h2>
-    <p>Select your Section to level up:</p>
+      <div class="section-btns-wrapper">
+        <button
+          class="section-btn animate"
+          data-section="admin"
+          data-variant="ocean"
+        >
+          <span class="label">Admin</span>
+        </button>
+        <button
+          class="section-btn"
+          data-section="Development"
+          data-variant="violet"
+        >
+          <span class="label">Development</span>
+        </button>
 
-    <div class="section-btns-wrapper">
-  <button class="section-btn animate" data-section="admin" data-variant="ocean">
-    <span class="label">Admin</span>
-    
-  </button>
-  <button class="section-btn" data-section="Development" data-variant="violet">
-    <span class="label">Development</span>
-    
-  </button>
+        <button class="section-btn" data-section="lwc" data-variant="violet">
+          <span class="label">LWC</span>
+        </button>
 
-  <button class="section-btn" data-section="lwc" data-variant="violet">
-    <span class="label">LWC</span>
-    
-  </button>
+        <button
+          class="section-btn"
+          data-section="integration"
+          data-variant="sunset"
+        >
+          <span class="label">Integration</span>
+        </button>
 
-  <button class="section-btn" data-section="integration" data-variant="sunset">
-    <span class="label">Integration</span>
-   
-  </button>
+        <button
+          class="section-btn"
+          data-section="triggers"
+          data-variant="ocean"
+        >
+          <span class="label">Triggers</span>
+        </button>
 
-  <button class="section-btn" data-section="triggers" data-variant="ocean">
-    <span class="label">Triggers</span>
-   
-  </button>
+        <button class="section-btn" data-section="apex" data-variant="violet">
+          <span class="label">Apex</span>
+        </button>
+      </div>
 
-  <button class="section-btn" data-section="apex" data-variant="violet">
-    <span class="label">Apex</span>
-   
-  </button>
-</div>
+      <!-- Dynamic quiz container -->
+      <div id="quiz-container"></div>
 
+      <!-- Scoreboard -->
+      <div id="game-content"></div>
 
-    <!-- Dynamic quiz container -->
-    <div id="quiz-container"></div>
+      <!--GAMEOVER & RESTART GAME BUTTON -->
+      <div id="game-over-screen" class="hidden">
+        <div class="game-over-content">
+          <h2>GAME OVER</h2>
+          <p>You got more than 3 answers wrong.</p>
+          <button id="restart-btn">Restart Game</button>
+        </div>
+      </div>
+    </section>
 
-    <!-- Scoreboard -->
-    <div id="game-content"></div>
+    <!-- Background Audio -->
+    <audio id="bg-audio" src="./assets/music/BG-music.wav" loop></audio>
+    <!-- Question & Answer Audio -->
+    <audio id="correct-sound" src="./assets/music/Correct answer.wav"></audio>
+    <audio id="incorrect-sound" src="./assets/music/Wrong answer.wav"></audio>
 
-    <!--GAMEOVER & RESTART GAME BUTTON -->
-<div id="game-over-screen" class="hidden">
-  <div class="game-over-content">
-    <h2>GAME OVER</h2>
-    <p>You got more than 3 answers wrong.</p>
-    <button id="restart-btn">Restart Game</button>
-  </div>
-</div>
-
-</section>
-
-
-
-
-
-<!-- Background Audio -->
-<audio id="bg-audio" src="./assets/music/BG-music.wav" loop></audio>
-<!-- Question & Answer Audio -->
-<audio id="correct-sound" src="./assets/music/Correct answer.wav"></audio>
-<audio id="incorrect-sound" src="./assets/music/Wrong answer.wav"></audio>
-
-
- <script src="./script.js"></script> 
-
-</body>
+    <script src="./script.js"></script>
+  </body>
 </html>
