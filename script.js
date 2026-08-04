@@ -482,7 +482,7 @@ audio.play();
 
 volumeIcon.addEventListener("click", () => {
     audio.muted = !audio.muted;
-    volumeIcon.src = audio.muted ? "./icons/audioOff.png" : "./icons/audioOn.png";
+    volumeIcon.src = audio.muted ? "./assets/icons/audioOff.png" : "./assets/icons/audioOn.png";
 });
 
 

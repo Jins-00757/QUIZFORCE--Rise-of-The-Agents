@@ -1,0 +1,9 @@
+<svg width="420" height="120" xmlns="http://www.w3.org/2000/svg">
+  <rect width="420" height="120" rx="12" fill="#0a0a0f"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+        font-family="Orbitron, sans-serif" font-size="32"
+        fill="#00eaff" 
+        style="text-shadow:0 0 10px #00eaff, 0 0 20px #00eaff;">
+    NEON QUIZ GAME
+  </text>
+</svg>
