@@ -31,6 +31,10 @@ const audio = document.getElementById("bg-audio");
 const volumeIcon = document.getElementById("volume-icon");
 const closeIcon = document.getElementById("close-icon");
 
+// Question and answer Audio
+const correctAudio = document.getElementById("correct-sound");
+const incorrectAudio = document.getElementById("incorrect-sound");
+
 // Game over screen
 const gameOverScreen = document.getElementById("game-over-screen");
 const restartBtn = document.getElementById("restart-btn");
@@ -296,7 +300,7 @@ function finishEligibilityQuiz() {
     switchScreen(quizScreen, mainGame);
 
     // Show a non-blocking popup with the result
-    showPopup("Quiz Completed You are Eligible!", `Your score is ${finalScore}/${eligibilityQuiz.length}`);
+    showPopup(`Quiz Completed! You are Eligible!`);
 }
 
 // Submit Quiz button: switch to main game right away when clicked
@@ -342,9 +346,9 @@ function loadSectionQuiz(section) {
     quizContainer.innerHTML = "";
     gameContent.textContent = `Score: 0 / ${quiz.length}`;
 
-   // let sectionScore = 0;
-     let wrongAnswers = 0;
-
+    let sectionScore = 0;
+    let wrongAnswers = 0;
+    let currentSectionIndex = 0;
 
     quiz.forEach((item, index) => {
         const block = document.createElement("div");
@@ -363,26 +367,33 @@ function loadSectionQuiz(section) {
         options.forEach(option => {
             option.addEventListener("click", () => {
 
-                // Score update
-                if (option.textContent === item.correct) {
+                // Disable all options after clicking
+                options.forEach(btn => btn.disabled = true);
+
+                const isCorrect = option.textContent === item.correct;
+
+                if (isCorrect) {
                     sectionScore++;
                     gameContent.textContent = `Score: ${sectionScore} / ${quiz.length}`;
+                    playCorrect();
                     option.style.background = "#026006";
                     option.style.color = "#81d185";
                 } else {
+                    wrongAnswers++;
+                    playWrong();
                     option.style.background = "#ed0b22";
                     option.style.color = "#e1aeae";
-                    wrongAnswers++;
                 }
 
+                // GAME OVER CHECK
                 if (wrongAnswers > 3) {
-            showGameOverScreen();
-            return; // stop quiz immediately
-        }
+                    showGameOverScreen();
+                    return;
+                }
 
                 // Move to next question
                 setTimeout(() => {
-                    block.classList.remove("active");
+                    quizContainer.children[currentSectionIndex].classList.remove("active");
                     currentSectionIndex++;
 
                     if (currentSectionIndex < quiz.length) {
@@ -395,6 +406,7 @@ function loadSectionQuiz(section) {
         });
     });
 }
+
 
 
 function showSectionSubmitButton(sectionScore, total) {
@@ -484,6 +496,29 @@ volumeIcon.addEventListener("click", () => {
     audio.muted = !audio.muted;
     volumeIcon.src = audio.muted ? "./assets/icons/audioOff.png" : "./assets/icons/audioOn.png";
 });
+
+
+const correctSound = new Audio("./assets/music/Correct answer.wav");
+const incorrectSound = new Audio("./assets/music/Wrong answer.wav");
+
+
+// Play correct and wrong answer sounds
+function playCorrect() {
+    if (!audio.muted) {
+        correctSound.currentTime = 0;
+        correctSound.play();
+    }
+}
+
+function playWrong() {
+    if (!audio.muted) {
+        incorrectSound.currentTime = 0;
+        incorrectSound.play();
+    }
+}
+
+
+
 
 
 /* ===========================
