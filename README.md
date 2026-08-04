@@ -4,7 +4,7 @@
   <img src="assets/banner.svg" width="100%" alt="Neon Quiz Game Banner">
 </p>
 
-<h1 align="center">⚡ QuizForce: Rise Of The Agents ⚡</h1>
+<h1 align="center">⚡ TEST YOURE SALESFORCE KNOWLEDGE ⚡</h1>
 
 <p align="center">
   <img src="assets/logo.svg" width="300" alt="Neon Quiz Game Logo">
