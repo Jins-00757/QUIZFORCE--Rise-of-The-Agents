@@ -18,10 +18,7 @@ const popup = document.getElementById("popup");
 const popupTitle = document.getElementById("popup-title");
 const popupMessage = document.getElementById("popup-message");
 const popupClose = document.getElementById("popup-close");
-// FIX: was `const popupOk` — showPopup() reassigns this variable every call
-// (to swap in a fresh clone of the button so old click listeners don't stack).
-// That reassignment threw "Assignment to constant variable" and silently
-// broke every popup's OK button. Must be `let`.
+
 let popupOk = document.getElementById("popup-ok");
 
 // Main game
@@ -812,6 +809,30 @@ function loadEligibilityQuiz() {
     });
 }
 
+//confetti effect
+function launchConfetti() {
+    const neonColors = ["#00eaff", "#ff00c8", "#00ff6a", "#ffea00"];
+
+    confetti({
+        particleCount: 200,
+        spread: 100,
+        startVelocity: 50,
+        colors: neonColors,
+        origin: { y: 0.6 }
+    });
+
+    setTimeout(() => {
+        confetti({
+            particleCount: 150,
+            spread: 80,
+            startVelocity: 45,
+            colors: neonColors,
+            origin: { y: 0.4 }
+        });
+    }, 350);
+}
+
+
 /* ===========================
    FINISH ELIGIBILITY QUIZ
 =========================== */
@@ -820,6 +841,8 @@ function finishEligibilityQuiz() {
     scoreDisplay.textContent = eligibilityScore;
     
     switchScreen(quizScreen, mainGame);
+    launchConfetti();
+
     
     showPopup(
         "Quiz Completed!",
@@ -956,6 +979,7 @@ function showSectionSubmitButton(sectionScore, total) {
     .addEventListener("click", () => {
       quizContainer.innerHTML = "";
       gameContent.textContent = "";
+      launchConfetti();
       showPopup("Success", "Section completed! Choose another section.");
     });
 }
@@ -971,7 +995,7 @@ function showGameOverScreen() {
   document.getElementById("restart-btn-inline").addEventListener("click", () => {
     quizContainer.innerHTML = "";
     gameContent.textContent = "";
-    showPopup("Restarted", "You can choose a new section now!");
+  showPopup("Restarted", "You can choose a new section now!");
   });
 }
 
