@@ -75,6 +75,27 @@ Displays:
 - Clears UI  
 - Returns to main game screen  
 
+### 🔹Info Icon (ℹ️) — Game Rules Popup
+- Smooth hover scaling  
+- Neon glow effect  
+- Pop with fade-in animation
+- Helps users understand eligibility criteria, scoring, game flow. 
+
+### 🔹Close Icon (✖) & Volume Icon (🔊 / 🔇)
+- Toggles game audio on/off
+- Allows user to mute  
+- Allows user to exit the game with close icon
+
+### 🔹⏳ Timer for Each Question
+- Dynamic timer
+- Timer reset automatically and quiz automatically move to the next question
+- Each question has 20-second countdown.
+
+### 🔹🎉 Confetti Celebration
+- Triggered when Eligibility quiz & section quiz is passed.
+- Uses lightweight canvas-confetti library for smooth performance.
+
+
 ---
 
 ## 🧩 Project Structure

@@ -1141,3 +1141,4 @@ floatImages.forEach((img) => randomizeImage(img));
 setInterval(() => {
   floatImages.forEach((img) => randomizeImage(img));
 }, 12000);
+
