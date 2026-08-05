@@ -13,7 +13,8 @@
 =========================== -->
     <section id="start-screen">
       <!-- Top Controls -->
-      <div id="left-controls">
+      <!--<div id="left-controls">
+        
         <img
           id="volume-icon"
           src="./assets/icons/audioOff.png"
@@ -23,12 +24,34 @@
       </div>
 
       <div id="right-controls">
+        
         <img
           id="close-icon"
           src="./assets/icons/cross.png"
           alt="Close Icon"
           class="icon-btn"
-        />
+        /> -->
+<div class="top-icons">
+        <div class="info-icon" id="info-icon">ℹ️</div>
+        <div class="volume-icon" id="volume-icon">🔊</div>
+        <div class="close-icon" id="close-icon">✖</div></div>
+        <div id="rules-popup" class="rules-popup">
+        <div class="rules-content">
+        <h2>Game Rules</h2>
+        <ul>
+            <li>Complete the eligibility quiz which has 15 Q & A to unlock the main game.</li>
+            <li>If you gave more than 4 wrong answers you need to restart the eligibility game.</li>
+            <li>Eligibility game has Basic salesforce quiz which is needed to pass to experiece main quiz.</li>
+            <li>Each section in the main game has 10 questions.</li>
+            <li>If you gave more than 3 wrong answers in section quiz youre game is over.</li>
+            <li>Confetti celebration appears when you pass eligibility and main game.</li>
+            <li>If main game is over you can restrat section vise quiz of main game.</li>
+        </ul>
+        <button id="rules-close">Close</button>
+    </div>
+</div>
+
+        
       </div>
 
       <!-- Logo + Title -->

@@ -266,7 +266,10 @@ button:focus-visible {
 #left-controls,
 #right-controls {
   position: absolute;
-  top: 20px;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 18px
 }
 
 #left-controls {
@@ -550,3 +553,116 @@ button:focus-visible {
   color: var(--text-muted);
   font-family: var(--font-body);
 }
+
+/* ===========================
+   INFO MODAL*/
+
+   /* Info Icon */
+   .top-icons {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 18px;
+   }
+.info-icon {
+    position: absolute;
+    top: 0px;
+    right: 40px;
+    font-size: 32px;
+    color: #00eaff;
+    cursor: pointer;
+    transition: 0.3s ease;
+    text-shadow: 0 0 10px #00eaff, 0 0 20px #ff00c8;
+}
+.volume-icon {
+    position: absolute;
+    top: 0px;
+    right: 1160px;
+    font-size: 32px;
+    color: #00eaff;
+    cursor: pointer;
+    transition: 0.3s ease;
+    text-shadow: 0 0 10px #00eaff, 0 0 20px #ff00c8;
+}
+.close-icon {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 32px;
+    color: #00eaff;
+    cursor: pointer;
+    transition: 0.3s ease;
+    text-shadow: 0 0 10px #00eaff, 0 0 20px #ff00c8;
+}
+.info-icon:hover {
+    transform: scale(1.15);
+    color: #ff00c8;
+    text-shadow: 0 0 12px #ff00c8, 0 0 22px #00eaff;
+}
+
+.rules-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.rules-content {
+    background: rgba(0,0,0,0.6);
+    padding: 25px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 450px;
+    color: #fff;
+    box-shadow: 0 0 20px #00eaff, 0 0 30px #ff00c8;
+    animation: popupFade 0.4s ease;
+}
+
+.rules-content h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #ffea00;
+    text-shadow: 0 0 10px #ffea00;
+}
+
+.rules-content ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.rules-content li {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+#rules-close {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    background: #00eaff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #000;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+#rules-close:hover {
+    background: #ff00c8;
+    color: #fff;
+}
+
+@keyframes popupFade {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+

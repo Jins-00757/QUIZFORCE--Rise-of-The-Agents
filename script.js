@@ -27,6 +27,11 @@ const sectionButtons = document.querySelectorAll(".section-btn");
 const quizContainer = document.getElementById("quiz-container");
 const gameContent = document.getElementById("game-content");
 
+//info popup
+const infoIcon = document.getElementById("info-icon");
+const rulesPopup = document.getElementById("rules-popup");
+const rulesClose = document.getElementById("rules-close");
+
 // Audio + icons
 const audio = document.getElementById("bg-audio");
 const volumeIcon = document.getElementById("volume-icon");
@@ -61,6 +66,21 @@ let currentQuestionIndex = 0;
 let currentSection = "";
 let currentSectionIndex = 0;
 let sectionScore = 0;
+
+
+
+//===========================
+// RULES POPUP
+//===========================
+
+infoIcon.addEventListener("click", () => {
+    rulesPopup.style.display = "flex";
+});
+
+rulesClose.addEventListener("click", () => {
+    rulesPopup.style.display = "none";
+});
+
 
 /* ===========================
    QUESTION BANKS
@@ -1002,13 +1022,26 @@ function showGameOverScreen() {
 /* ===========================
    AUDIO CONTROL
 =========================== */
-audio.play();
+
+
+let isMuted = false;
 
 volumeIcon.addEventListener("click", () => {
-  audio.muted = !audio.muted;
-  volumeIcon.src = audio.muted
-    ? "./assets/icons/audioOff.png"
-    : "./assets/icons/audioOn.png";
+    isMuted = !isMuted;
+ 
+    if (isMuted) {
+        volumeIcon.textContent = "🔇";
+        volumeIcon.classList.add("muted");
+        audio.muted = true;
+        // mute your game audio here
+    } else {
+        volumeIcon.textContent = "🔊";
+        volumeIcon.classList.remove("muted");
+        audio.muted = false;
+        audio.play();
+        // unmute your game audio here
+    }
+   
 });
 
 // Play correct and wrong answer sounds
