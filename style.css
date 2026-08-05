@@ -322,6 +322,10 @@ button:focus-visible {
 
 .question {
   display: none;
+  font-size: 18px;
+  font-weight: bold;
+  color:#fbfbfd;
+  text-shadow: 0 0 6px rgba(229, 246, 247, 0.35);
   margin: 20px auto;
   width: 100%;
 }
