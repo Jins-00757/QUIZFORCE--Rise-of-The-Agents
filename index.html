@@ -40,11 +40,11 @@
         <h2>Game Rules</h2>
         <ul>
             <li>Complete the eligibility quiz which has 15 Q & A to unlock the main game.</li>
+            <li>Eligibility Quiz has timer to give answer.</li>
             <li>If you gave more than 4 wrong answers you need to restart the eligibility game.</li>
             <li>Eligibility game has Basic salesforce quiz which is needed to pass to experiece main quiz.</li>
             <li>Each section in the main game has 10 questions.</li>
             <li>If you gave more than 3 wrong answers in section quiz youre game is over.</li>
-            <li>Confetti celebration appears when you pass eligibility and main game.</li>
             <li>If main game is over you can restrat section vise quiz of main game.</li>
         </ul>
         <button id="rules-close">Close</button>
@@ -89,11 +89,10 @@
 
       <div id="scoreboard">
         <p>Score: <span id="score">0</span>/15</p>
-
-        <div class="mini-progress-bar">
-          <div class="mini-progress-fill" id="miniProgressFill"></div>
-        </div>
       </div>
+
+      <div id="question-timer">Time Left: <span id="timer-value">20</span>s</div>
+
 
       <!-- Dynamic questions injected here -->
       <div id="eligibility-questions" class="question-wrapper"></div>

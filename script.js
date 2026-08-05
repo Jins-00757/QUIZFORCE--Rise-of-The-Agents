@@ -66,6 +66,9 @@ let currentQuestionIndex = 0;
 let currentSection = "";
 let currentSectionIndex = 0;
 let sectionScore = 0;
+let timer;
+let timeLeft = 20; // seconds per question
+
 
 
 
@@ -755,6 +758,8 @@ startBtn.addEventListener("click", () => {
 =========================== */
 
 function loadEligibilityQuiz() {
+  startQuestionTimer();
+
     // FULL RESET
     eligibilityQuestionsContainer.innerHTML = "";
     eligibilityScore = 0;
@@ -817,8 +822,9 @@ function loadEligibilityQuiz() {
             scoreDisplay.textContent = eligibilityScore;
 
             // Move to next question
-            block.classList.remove("active");
-            currentQuestionIndex++;
+            clearInterval(timer);
+            moveToNextEligibilityQuestion();
+
 
             if (currentQuestionIndex < eligibilityQuiz.length) {
                 eligibilityQuestionsContainer.children[currentQuestionIndex].classList.add("active");
@@ -828,6 +834,56 @@ function loadEligibilityQuiz() {
         });
     });
 }
+
+function startQuestionTimer() {
+    clearInterval(timer);
+    timeLeft = 20; // reset timer for each question
+    document.getElementById("timer-value").textContent = timeLeft;
+
+    timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer-value").textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+
+            // Auto mark wrong answer
+            eligibilityWrongAnswers++;
+
+            // Check wrong limit
+            if (eligibilityWrongAnswers > 4) {
+                showPopup("Eligibility Quiz Failed", "Time's up too many times! Restarting quiz.");
+                
+                popupOk.replaceWith(popupOk.cloneNode(true));
+                const newPopupOk = document.querySelector("#popup-ok");
+
+                newPopupOk.addEventListener("click", () => {
+                    restartEligibilityQuiz();
+                });
+
+                return;
+            }
+
+            // Move to next question automatically
+            moveToNextEligibilityQuestion();
+        }
+    }, 1000);
+}
+
+function moveToNextEligibilityQuestion() {
+    const blocks = eligibilityQuestionsContainer.querySelectorAll(".question");
+
+    blocks[currentQuestionIndex].classList.remove("active");
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < eligibilityQuiz.length) {
+        blocks[currentQuestionIndex].classList.add("active");
+        startQuestionTimer(); // restart timer for next question
+    } else {
+        finishEligibilityQuiz();
+    }
+}
+
 
 //confetti effect
 function launchConfetti() {
@@ -921,6 +977,7 @@ sectionButtons.forEach((btn) => {
    LOAD SECTION QUIZ
 =========================== */
 function loadSectionQuiz(section) {
+ 
   const quiz = sectionQuizzes[section];
   quizContainer.innerHTML = "";
   gameContent.textContent = `Score: 0 / ${quiz.length}`;

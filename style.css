@@ -666,3 +666,15 @@ button:focus-visible {
     to { opacity: 1; transform: scale(1); }
 }
 
+#question-timer {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffa600;
+    margin-bottom: 5px;
+    text-shadow: 0 0 10px #ffea00, 0 0 20px #ff00c8;
+}
+
+#timer-value {
+    color: #00eaff;
+}
+
