@@ -1,12 +1,61 @@
 /* ===========================
+   DESIGN TOKENS
+=========================== */
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap");
+
+:root {
+  --bg-deep: #050317;
+  --bg-mid: #0a0a2e;
+  --bg-panel: rgba(16, 18, 46, 0.65);
+
+  --accent-cyan: #00eaff;
+  --accent-violet: #2911af;
+  --accent-magenta: #2b9bdc;
+
+  --text-primary: #eaf3ff;
+  --text-muted: #9fb3d9;
+
+  --ring-gradient: radial-gradient(
+    from var(--angle, 0deg),
+    var(--accent-cyan),
+    var(--accent-violet),
+    var(--accent-magenta),
+    var(--accent-cyan)
+  );
+
+  --font-display: "Orbitron", "Arial Narrow", sans-serif;
+  --font-body: Arial, sans-serif;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes spinRing {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@keyframes shimmerText {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* ===========================
    GLOBAL PAGE STYLING
 =========================== */
 body {
   margin: 0;
   height: 100vh;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(to bottom, #090866, #000306);
-  color: #ffffff;
+  font-family: var(--font-body);
+  background:
+    radial-gradient(ellipse at top, #14134a 0%, transparent 60%),
+    linear-gradient(to bottom, var(--bg-mid), var(--bg-deep));
+  color: var(--text-primary);
   text-align: center;
   overflow-x: hidden;
 }
@@ -23,17 +72,47 @@ section {
   display: none !important;
 }
 
-#game-title {
-  font-size: 40px;
-  font-family: audiowide, sans-serif;
-  font-weight: 800;
-  color: #e7fafc;
+/* ===========================
+   HEADINGS — shimmering metallic sweep
+=========================== */
+#game-title,
+h2 {
+  font-family: var(--font-display);
   text-transform: uppercase;
   letter-spacing: 4px;
-  text-shadow:
-    0 0 10px #00eaff,
-    0 0 10px #6494ed,
-    0 0 30px #008c9e;
+  background: linear-gradient(
+    100deg,
+    var(--accent-cyan) 0%,
+    #ffffff 12%,
+    var(--accent-violet) 24%,
+    var(--accent-cyan) 40%
+  );
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmerText 5s linear infinite;
+  filter: drop-shadow(0 0 18px rgba(0, 234, 255, 0.35));
+}
+
+#game-title {
+  font-size: 40px;
+  font-weight: 800;
+}
+
+h2 {
+  font-size: 34px;
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 12px;
+  background-color: var(--bg-panel);
+  -webkit-background-clip: text, padding-box;
+  background-clip: text, padding-box;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+  width: fit-content;
+  margin: 0 auto 5px;
 }
 
 /* ===========================
@@ -46,12 +125,14 @@ section {
 #game-logo {
   width: 200px;
   margin-bottom: 10px;
+  filter: drop-shadow(0 0 16px rgba(139, 92, 246, 0.5));
 }
 
 .subtitle {
   margin-top: -10px;
   font-size: 18px;
-  opacity: 0.9;
+  color: var(--text-muted);
+  letter-spacing: 1px;
 }
 
 /* Floating animated agents */
@@ -71,138 +152,112 @@ section {
   }
 }
 
-#start-btn {
-  margin-top: 20px;
-  padding: 14px 32px;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 50px;
-  border: none;
-  cursor: pointer;
-  background: linear-gradient(135deg, #07154d, #7aa2ff);
-  color: #fff;
-  letter-spacing: 1px;
-  transition: all 0.25s ease;
-
-  animation: pulseGlow 2s infinite;
-
-  /* 3D depth */
-  box-shadow:
-    0 8px 0 #162b7a,
-    /* solid bottom layer */ 0 8px 20px rgba(0, 0, 0, 0.4),
-    /* soft shadow */ 0 0 20px #7aa2ff;
-
-  transition: all 0.2s ease;
-}
-
-/* Hover: lift up */
-#start-btn:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow:
-    0 12px 0 #162b7a,
-    0 12px 25px rgba(0, 0, 0, 0.5),
-    0 0 30px #7aa2ff;
-}
-
-/* Active: press down */
-#start-btn:active {
-  transform: translateY(4px) scale(0.95);
-  box-shadow:
-    0 4px 0 #162b7a,
-    0 4px 10px rgba(0, 0, 0, 0.3),
-    0 0 15px #7aa2ff;
-}
-
-@keyframes pulseGlow {
-  0% {
-    box-shadow:
-      0 8px 0 #162b7a,
-      0 8px 20px rgba(0, 0, 0, 0.4),
-      0 0 15px #7aa2ff;
-  }
-  50% {
-    box-shadow:
-      0 8px 0 #162b7a,
-      0 8px 30px rgba(122, 162, 255, 0.7),
-      0 0 35px #7aa2ff;
-  }
-  100% {
-    box-shadow:
-      0 8px 0 #162b7a,
-      0 8px 20px rgba(0, 0, 0, 0.4),
-      0 0 15px #7aa2ff;
-  }
-}
-/* Stylish Placeholder */
 #player-name {
   padding: 14px;
   font-size: 18px;
+  font-family: var(--font-body);
   border-radius: 10px;
-  border: 2px solid #4a6cf7;
-  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--accent-violet);
+  background: rgba(255, 255, 255, 0.06);
   color: #fff;
   width: 280px;
   transition: 0.3s ease;
-  animation:
-    floatInput 3s ease-in-out infinite alternate,
-    pulseBorder 2s infinite alternate;
-}
-
-@keyframes floatInput {
-  0% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(10px);
-  }
-  100% {
-    transform: translateX(0);
-  }
+  animation: pulseBorder 2s infinite alternate;
 }
 
 @keyframes pulseBorder {
   0% {
-    border-color: #4a6cf7;
+    border-color: var(--accent-violet);
   }
   100% {
-    border-color: #7aa2ff;
+    border-color: var(--accent-cyan);
   }
 }
 
 #player-name::placeholder {
   color: #cdd9ff;
-  opacity: 0.8;
+  opacity: 0.7;
   font-style: italic;
   letter-spacing: 1px;
 }
 
-/* Glow on focus */
 #player-name:focus {
-  border-color: #7aa2ff;
-  box-shadow: 0 0 12px #7aa2ff;
-  background: rgba(255, 255, 255, 0.15);
-  transform: scale(1.05);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 14px rgba(0, 234, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
 }
 
 /* ===========================
-   BUTTONS
+   BUTTONS — shared shiny gradient-ring signature
 =========================== */
+/* Every <button> in the app — including ones the game injects at runtime
+   (restart, section-submit, etc.) — gets the same rotating gradient ring.
+   The ring lives on a ::before behind the button; the button's own opaque
+   background covers the center, leaving a ~2.5px glowing edge visible. */
 button {
-  padding: 12px 24px;
+  position: relative;
+  isolation: isolate;
+  padding: 13px 26px;
   font-size: 16px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
-  background-color: #142994;
-  color: #faf5f5;
+  color: var(--text-primary);
+  background: #10132e;
   transition:
-    transform 0.2s,
-    background-color 0.2s;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+button::before {
+  content: "";
+  position: absolute;
+  inset: -2.5px;
+  border-radius: inherit;
+  background: var(--ring-gradient);
+  z-index: -1;
+  animation: spinRing 3.5s linear infinite;
 }
 
 button:hover {
-  transform: scale(1.1);
-  background-color: #1a36b0;
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 10px 26px rgba(0, 234, 255, 0.25);
+}
+
+button:active {
+  transform: translateY(0) scale(0.97);
+}
+
+button:focus-visible {
+  outline: 3px solid var(--accent-cyan);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button::before,
+  #game-title,
+  h2 {
+    animation: none;
+  }
+}
+
+/* ===========================
+   START BUTTON — hero action, extra presence
+=========================== */
+#start-btn {
+  margin-top: 20px;
+  padding: 16px 40px;
+  font-size: 20px;
+  background: linear-gradient(135deg, #1a1a52, #201a5e);
+}
+
+#start-btn::before {
+  animation-duration: 2.4s;
 }
 
 /* ===========================
@@ -226,6 +281,7 @@ button:hover {
   height: 32px;
   cursor: pointer;
   transition: transform 0.2s;
+  filter: drop-shadow(0 0 6px rgba(0, 234, 255, 0.4));
 }
 
 .icon-btn:hover {
@@ -239,43 +295,23 @@ button:hover {
   padding-top: 0px;
 }
 
-/* Scoreboard Card */
 #scoreboard {
   width: fit-content;
   margin: 20px auto;
   padding: 16px 28px;
-
-  background: rgba(18, 198, 192, 0.08);
+  background: var(--bg-panel);
   backdrop-filter: blur(12px);
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.15);
-
-  box-shadow: 0 6px 24px rgba(135, 184, 214, 0.35);
-  text-align: center;
+  box-shadow: 0 6px 24px rgba(0, 234, 255, 0.12);
 }
 
 #scoreboard p {
   margin: 0;
   font-size: 22px;
   font-weight: 600;
-  color: #eaf3ff;
-}
-
-h2 {
-  font-size: 38px;
-  font-weight: 600;
-  color: #eaf3ff;
-  text-align: center;
-  padding: 16px 32px;
-  border-radius: 12px;
-
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
-  width: fit-content;
-  margin: 0 auto 5px;
+  font-family: var(--font-display);
+  color: var(--text-primary);
 }
 
 .question-wrapper {
@@ -294,38 +330,42 @@ h2 {
   display: block;
 }
 
+/* Section / quiz answer options — dark glass card with gradient hover edge */
 .quiz-option {
+  position: relative;
   width: 100%;
   padding: 12px;
   margin: 10px 0;
-  border-radius: 6px;
-  border: 1px solid #fff;
-  background: transparent;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
   color: #fff;
+  font-family: var(--font-body);
   cursor: pointer;
-  transition: background 0.2s;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .quiz-option:hover {
-  background: #5e90ce;
+  border-color: var(--accent-cyan);
+  background: rgba(0, 234, 255, 0.08);
+  transform: translateX(4px);
 }
 
 .quiz-option.selected {
-  background: #1a36b0;
+  border-color: var(--accent-violet);
+  background: rgba(139, 92, 246, 0.18);
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.35);
 }
 
 .submit-btn {
   margin-top: 10px;
-  background: #022241;
-  border: 1px solid #fff;
-}
-
-.submit-btn:hover {
-  background: #024181;
 }
 
 /* ===========================
-   POPUP MODAL
+   POPUP MODAL — dark glass, gradient ring
 =========================== */
 .popup {
   position: fixed;
@@ -333,7 +373,8 @@ h2 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(2, 2, 12, 0.75);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -341,13 +382,31 @@ h2 {
 }
 
 .popup-content {
-  background: #fff;
-  color: #000;
-  padding: 20px;
-  border-radius: 8px;
+  position: relative;
+  background: linear-gradient(180deg, #f1f1f8, #0a0a24);
+  color: var(--text-primary);
+  padding: 26px 24px;
+  border-radius: 14px;
   width: 300px;
   text-align: center;
-  position: relative;
+  isolation: isolate;
+}
+
+.popup-content::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: var(--ring-gradient);
+  z-index: -1;
+  animation: spinRing 4s linear infinite;
+}
+
+#popup-title {
+  font-family: var(--font-display);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
 }
 
 #popup-close {
@@ -356,12 +415,16 @@ h2 {
   right: 15px;
   font-size: 20px;
   cursor: pointer;
+  color: var(--text-muted);
+}
+
+#popup-close:hover {
+  color: var(--accent-magenta);
 }
 
 /* ===========================
-   MAIN GAME
+   MAIN GAME — section buttons
 =========================== */
-/* Gradient, modern section buttons */
 .section-btn {
   --btn-h: 48px;
   display: inline-flex;
@@ -369,132 +432,21 @@ h2 {
   justify-content: center;
   height: var(--btn-h);
   min-width: 160px;
-  padding: 0 20px;
   margin: 8px;
-  border: none;
-  border-radius: 14px;
-  color: #fff;
-  font-weight: 600;
-  letter-spacing: 0.2px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition:
-    transform 220ms cubic-bezier(0.2, 0.9, 0.3, 1),
-    box-shadow 220ms ease,
-    opacity 180ms ease;
-  box-shadow:
-    0 6px 18px rgba(20, 20, 40, 0.12),
-    inset 0 -2px 6px rgba(255, 255, 255, 0.03);
-  background-image: linear-gradient(
-    135deg,
-    #6ee7b7 0%,
-    #3b82f6 50%,
-    #8b5cf6 100%
-  );
-  background-size: 200% 200%;
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
 }
 
-/* Slight lift on hover */
-.section-btn:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow:
-    0 14px 30px rgba(20, 20, 40, 0.18),
-    inset 0 -2px 8px rgba(255, 255, 255, 0.04);
-}
-
-/* Focus for keyboard users */
-.section-btn:focus {
-  box-shadow:
-    0 0 0 4px rgba(59, 130, 246, 0.18),
-    0 10px 24px rgba(20, 20, 40, 0.18);
-}
-
-/* Active press */
-.section-btn:active {
-  transform: translateY(-2px) scale(0.995);
-  box-shadow: 0 8px 20px rgba(20, 20, 40, 0.14);
-}
-
-/* Subtle animated sheen */
-.section-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.06),
-    rgba(255, 255, 255, 0.02) 40%,
-    rgba(255, 255, 255, 0.06)
-  );
-  transform: translateX(-110%);
-  transition: transform 650ms cubic-bezier(0.2, 0.9, 0.3, 1);
-  pointer-events: none;
-}
-
-/* Move sheen on hover */
-.section-btn:hover::before {
-  transform: translateX(110%);
-}
-
-/* Variant: colorful presets via data attribute */
-.section-btn[data-variant="sunset"] {
-  background-image: linear-gradient(
-    135deg,
-    #6911a8 0%,
-    #5abde5 50%,
-    #8661ca 100%
-  );
-}
-.section-btn[data-variant="ocean"] {
-  background-image: linear-gradient(
-    135deg,
-    #00c6ff 0%,
-    #0072ff 50%,
-    #00a3ff 100%
-  );
-}
-.section-btn[data-variant="violet"] {
-  background-image: linear-gradient(
-    135deg,
-    #7c3aed 0%,
-    #4f46e5 50%,
-    #06b6d4 100%
-  );
-}
-
-/* Small label / subtitle inside button */
 .section-btn .label {
   display: block;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1;
 }
 
-/* Responsive: stack buttons on small screens */
 .section-btns-wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
-}
-
-/* Optional: animated gradient background shift */
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-.section-btn.animate {
-  animation: gradientShift 8s ease infinite;
-  background-size: 300% 300%;
+  justify-content: center;
 }
 
 #quiz-container {
@@ -507,14 +459,17 @@ h2 {
   margin-top: 20px;
   font-size: 18px;
   font-weight: bold;
+  font-family: var(--font-display);
+  color: var(--accent-cyan);
 }
 
 #main-game {
-  background-image: url("./assets/images/quiz-bg.png");
+  background-image:
+    radial-gradient(ellipse at top, rgba(139, 92, 246, 0.12), transparent 60%),
+    url("./assets/images/quiz-bg.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.95;
 }
 
 /* ===========================
@@ -536,71 +491,58 @@ h2 {
   animation: moveAcross 6s infinite linear;
 }
 
-/*GAME OVER SCREEN*/
+/* ===========================
+   GAME OVER SCREEN
+=========================== */
 #game-over-screen {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(2, 2, 12, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 999;
 }
 
-#game-over-screen.hidden {
-  display: none;
-}
-
 .game-over-content {
+  position: relative;
   text-align: center;
   padding: 30px 40px;
   border-radius: 16px;
-  background: radial-gradient(circle at top, #1a1a2e 0%, #000 60%);
-  box-shadow:
-    0 0 20px #ff004c,
-    0 0 40px #ff004c,
-    0 0 80px #ff004c;
-  animation: pulseGlow 1.5s infinite alternate;
+  background: radial-gradient(circle at top, #ddddff 0%, #0a0a24 60%);
+  isolation: isolate;
+}
+
+.game-over-content::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    var(--accent-magenta),
+    var(--accent-violet),
+    var(--accent-magenta)
+  );
+  z-index: -1;
+  animation: spinRing 2.2s linear infinite;
 }
 
 .game-over-content h2 {
-  font-family: "Orbitron", sans-serif;
-  font-size: 48px;
+  font-family: var(--font-display);
+  font-size: 44px;
   letter-spacing: 6px;
   text-transform: uppercase;
-  color: #ff004c;
-  text-shadow:
-    0 0 10px #ff004c,
-    0 0 20px #ff2a68,
-    0 0 40px #ff2a68;
+  background: linear-gradient(100deg, var(--accent-magenta), #ad11b8 20%, var(--accent-magenta) 40%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmerText 3s linear infinite;
 }
 
 .game-over-content p {
   margin-top: 10px;
-  color: #f5f5f5;
-}
-
-#restart-btn {
-  padding: 14px 32px;
-  border-radius: 50px;
-  border: none;
-  background: linear-gradient(135deg, #ff00ff, #00ffff, #00ff00, #ffff00);
-  background-size: 300%;
-  color: #fff;
-  font-weight: 900;
-  text-transform: uppercase;
-  cursor: pointer;
-  animation: rainbowShift 3s linear infinite;
-  box-shadow:
-    0 0 15px #ff00ff,
-    0 0 25px #00ffff;
-}
-
-@keyframes rainbowShift {
-  0% {
-    background-position: 0%;
-  }
-  100% {
-    background-position: 100%;
-  }
+  color: var(--text-muted);
+  font-family: var(--font-body);
 }

@@ -9,9 +9,7 @@ const playerNameInput = document.getElementById("player-name");
 
 // Eligibility quiz
 const quizScreen = document.getElementById("eligibility-quiz");
-const eligibilityQuestionsContainer = document.getElementById(
-  "eligibility-questions",
-);
+const eligibilityQuestionsContainer = document.getElementById("eligibility-questions");
 const scoreDisplay = document.getElementById("score");
 const submitQuiz = document.getElementById("submit-quiz");
 
@@ -20,7 +18,11 @@ const popup = document.getElementById("popup");
 const popupTitle = document.getElementById("popup-title");
 const popupMessage = document.getElementById("popup-message");
 const popupClose = document.getElementById("popup-close");
-const popupOk = document.getElementById("popup-ok");
+// FIX: was `const popupOk` — showPopup() reassigns this variable every call
+// (to swap in a fresh clone of the button so old click listeners don't stack).
+// That reassignment threw "Assignment to constant variable" and silently
+// broke every popup's OK button. Must be `let`.
+let popupOk = document.getElementById("popup-ok");
 
 // Main game
 const mainGame = document.getElementById("main-game");
@@ -56,6 +58,8 @@ const floatImages = [
    GLOBAL VARIABLES
 =========================== */
 let finalScore = 0;
+let eligibilityScore = 0;
+let eligibilityWrongAnswers = 0;
 let currentQuestionIndex = 0;
 let currentSection = "";
 let currentSectionIndex = 0;
@@ -77,12 +81,12 @@ const eligibilityQuiz = [
   },
   {
     q: "Which Salesforce mascot is a bear?",
-    options: ["Codey", "Astro", "Einstein"],
+    options: ["Astro", "Codey", "Einstein"],
     correct: "Codey",
   },
   {
     q: "Trailhead is Salesforce’s…",
-    options: ["Learning Platform", "Music App", "Cloud Storage"],
+    options: ["Music App", "Learning Platform", "Cloud Storage"],
     correct: "Learning Platform",
   },
   {
@@ -95,6 +99,108 @@ const eligibilityQuiz = [
     options: ["Querying Data", "UI Styling", "Automation"],
     correct: "Querying Data",
   },
+  {
+  q: "What is Salesforce primarily used for?",
+options: [
+"Video Editing",
+"Operating System Management",
+"Customer Relationship Management",
+"Database Hardware Setup"
+],
+correct: "Customer Relationship Management"
+},
+{
+q: "Which Salesforce edition is commonly used by small businesses?",
+options: [
+"Enterprise Edition",
+"Unlimited Edition",
+"Professional Edition",
+"Developer Edition"
+],
+correct: "Professional Edition"
+},
+{
+q: "What is an object in Salesforce?",
+options: [
+"A table that stores data",
+"A type of dashboard",
+"A workflow rule",
+"A permission setting"
+],
+correct: "A table that stores data"
+},
+{
+q: "Which Salesforce feature is used to automate simple business processes?",
+options: [
+"Validation Rules",
+"Workflow Rules",
+"Reports",
+"Page Layouts"
+],
+correct: "Workflow Rules"
+},
+{
+q: "What is a record in Salesforce?",
+options: [
+"A row of data in an object",
+"A type of dashboard",
+"A permission set",
+"A sandbox environment"
+],
+correct: "A row of data in an object"
+},
+{
+q: "Which tool is used to generate data insights in Salesforce?",
+options: [
+"Profiles",
+"Page Layouts",
+"Record Types",
+"Reports"
+],
+correct: "Reports"
+},
+{
+q: "What does a Salesforce dashboard display?",
+options: [
+"Visual summaries of reports",
+"Code execution logs",
+"User permissions",
+"Workflow automation steps"
+],
+correct: "Visual summaries of reports"
+},
+{
+q: "Which Salesforce feature controls what a user can see?",
+options: [
+"Dashboards",
+"Reports",
+"Profiles",
+"Objects"
+],
+correct: "Profiles"
+},
+{
+q: "What is the App Launcher used for?",
+options: [
+"Accessing apps and tabs",
+"Running Apex code",
+"Managing API integrations",
+"Creating triggers"
+],
+correct: "Accessing apps and tabs"
+},
+{
+q: "What is a sandbox in Salesforce?",
+options: [
+"A testing environment",
+"A reporting tool",
+"A permission set",
+"A workflow automation tool"
+],
+correct: "A testing environment"
+}
+
+
 ];
 
 const sectionQuizzes = {
@@ -124,6 +230,51 @@ const sectionQuizzes = {
       options: ["Additional Access", "Storage Increase", "New UI Themes"],
       correct: "Additional Access",
     },
+    {
+q: "What happens if a user loses access to a field used inside a validation rule?",
+options: [
+"Validation rule still fires",
+"Validation rule stops firing",
+"Record saves without validation",
+"User receives insufficient privileges error"
+],
+correct: "Validation rule still fires"
+},
+{
+q: "Which feature ensures field-level security is respected even when using automation?",
+options: [
+"Page Layouts",
+"Profiles",
+"Permission Sets",
+"With Sharing Rules"
+],
+correct: "Permission Sets"
+},
+{
+q: "What is the maximum number of active assignment rules allowed per object?",
+options: ["1", "5", "10", "Unlimited"],
+correct: "1"
+},
+{
+q: "Which metadata type cannot be deployed using change sets?",
+options: [
+"Standard Value Sets",
+"Custom Metadata Types",
+"Profiles",
+"Flows"
+],
+correct: "Standard Value Sets"
+},
+{
+q: "What is the most reliable way to enforce data quality across all interfaces?",
+options: [
+"Page Layout Required Fields",
+"Validation Rules",
+"Field-Level Security",
+"Record Types"
+],
+correct: "Validation Rules"
+}
   ],
 
   Development: [
@@ -177,6 +328,56 @@ const sectionQuizzes = {
       ],
       correct: "Outbound Message or Platform Events / Streaming API",
     },
+    {
+q: "Which deployment tool supports rollback on failure?",
+options: [
+"Change Sets",
+"Ant Migration Tool",
+"Salesforce CLI",
+"Workbench"
+],
+correct: "Salesforce CLI"
+},
+{
+q: "Which metadata API format is required for source-driven development?",
+options: [
+"Metadata API",
+"Tooling API",
+"SFDX Source Format",
+"SOAP API"
+],
+correct: "SFDX Source Format"
+},
+{
+q: "Which feature allows tracking changes to Apex classes over time?",
+options: [
+"Debug Logs",
+"Version Control (Git)",
+"Setup Audit Trail",
+"Deployment History"
+],
+correct: "Version Control (Git)"
+},
+{
+q: "Which API is best for retrieving large volumes of records efficiently?",
+options: [
+"REST API",
+"SOAP API",
+"Bulk API",
+"Tooling API"
+],
+correct: "Bulk API"
+},
+{
+q: "Which deployment method supports partial deployments?",
+options: [
+"Change Sets",
+"Metadata API",
+"Salesforce CLI",
+"Workbench"
+],
+correct: "Metadata API"
+}
   ],
 
   lwc: [
@@ -209,6 +410,51 @@ const sectionQuizzes = {
       options: ["Browser", "Server Only", "Database"],
       correct: "Browser",
     },
+    {
+q: "Which LWC lifecycle hook is guaranteed to run after every render?",
+options: [
+"connectedCallback",
+"renderedCallback",
+"disconnectedCallback",
+"constructor"
+],
+correct: "renderedCallback"
+},
+{
+q: "Which decorator ensures a property is reactive and passed from parent to child?",
+options: ["@track", "@wire", "@api", "@readonly"],
+correct: "@api"
+},
+{
+q: "What is the correct way to call an Apex method imperatively?",
+options: [
+"@wire(method)",
+"method.invoke()",
+"methodName({param:value})",
+"Apex.call(method)"
+],
+correct: "methodName({param:value})"
+},
+{
+q: "Which LWC feature prevents DOM re-rendering for unchanged values?",
+options: [
+"Reactive Proxy",
+"Shadow DOM",
+"Lightning Locker",
+"Virtual DOM"
+],
+correct: "Reactive Proxy"
+},
+{
+q: "Which module is required to publish LMS messages?",
+options: [
+"lightning/messageService",
+"lightning/pubsub",
+"uiRecordApi",
+"lightning/navigation"
+],
+correct: "lightning/messageService"
+}
   ],
 
   integration: [
@@ -233,6 +479,51 @@ const sectionQuizzes = {
       options: ["External Data", "UI Themes", "Reports"],
       correct: "External Data",
     },
+    {
+q: "Which integration pattern is best for updating Salesforce when an external system sends frequent updates?",
+options: [
+"Request and Reply",
+"Fire and Forget",
+"Batch Data Synchronization",
+"Remote Call-In"
+],
+correct: "Remote Call-In"
+},
+{
+q: "Which protocol does Salesforce use for outbound messages?",
+options: ["SOAP", "REST", "GraphQL", "gRPC"],
+correct: "SOAP"
+},
+{
+q: "Which API supports composite requests?",
+options: [
+"SOAP API",
+"REST API",
+"Bulk API",
+"Streaming API"
+],
+correct: "REST API"
+},
+{
+q: "Which integration tool is best for orchestrating multi-system workflows?",
+options: [
+"Outbound Messages",
+"Platform Events",
+"MuleSoft",
+"Change Data Capture"
+],
+correct: "MuleSoft"
+},
+{
+q: "Which feature allows near real-time event-driven integration?",
+options: [
+"Bulk API",
+"Platform Events",
+"Metadata API",
+"Tooling API"
+],
+correct: "Platform Events"
+}
   ],
 
   triggers: [
@@ -265,6 +556,56 @@ const sectionQuizzes = {
       ],
       correct: "New Version of Records",
     },
+    {
+q: "Which trigger context is best for enforcing complex validation logic?",
+options: [
+"Before Insert",
+"After Insert",
+"After Update",
+"Before Delete"
+],
+correct: "Before Insert"
+},
+{
+q: "Which pattern prevents recursion in triggers?",
+options: [
+"Static Boolean Flags",
+"Trigger.new",
+"Trigger.oldMap",
+"SOQL Limits"
+],
+correct: "Static Boolean Flags"
+},
+{
+q: "Which trigger event cannot modify Trigger.new?",
+options: [
+"Before Update",
+"Before Insert",
+"After Insert",
+"Before Delete"
+],
+correct: "After Insert"
+},
+{
+q: "What is the best practice for handling multiple objects in triggers?",
+options: [
+"Multiple triggers per object",
+"Single trigger per object",
+"Inline logic",
+"Workflow rules"
+],
+correct: "Single trigger per object"
+},
+{
+q: "Which feature allows triggers to scale for large data volumes?",
+options: [
+"Future Methods",
+"Batch Apex",
+"Trigger Framework",
+"Platform Events"
+],
+correct: "Trigger Framework"
+}
   ],
 
   apex: [
@@ -293,7 +634,58 @@ const sectionQuizzes = {
       options: ["Job Chaining", "UI Customization", "Report Scheduling"],
       correct: "Job Chaining",
     },
+    {
+q: "Which Apex feature allows parallel asynchronous processing?",
+options: [
+"Future Methods",
+"Queueable Apex",
+"Batch Apex",
+"Scheduled Apex"
+],
+correct: "Queueable Apex"
+},
+{
+q: "Which governor limit is shared across all concurrent Apex executions?",
+options: [
+"CPU Time",
+"SOQL Queries",
+"Heap Size",
+"Concurrent Async Jobs"
+],
+correct: "Concurrent Async Jobs"
+},
+{
+q: "Which Apex feature supports chaining jobs?",
+options: [
+"Batch Apex",
+"Queueable Apex",
+"Future Methods",
+"Scheduled Apex"
+],
+correct: "Queueable Apex"
+},
+{
+q: "Which method ensures safe DML operations inside loops?",
+options: [
+"Database.insert",
+"Database.upsert",
+"Database.savepoint",
+"Bulkification"
+],
+correct: "Bulkification"
+},
+{
+q: "Which Apex feature allows querying metadata?",
+options: [
+"Tooling API",
+"Metadata API",
+"Schema Namespace",
+"Describe Calls"
+],
+correct: "Describe Calls"
+}
   ],
+
 };
 
 /* ===========================
@@ -307,7 +699,7 @@ function showPopup(title, message, onOk = null) {
 
   const newOk = popupOk.cloneNode(true);
   popupOk.parentNode.replaceChild(newOk, popupOk);
-  popupOk = newOk;
+  popupOk = newOk; // works now that popupOk is declared with `let`
 
   popupOk.addEventListener("click", () => {
     popup.classList.add("hidden");
@@ -337,12 +729,6 @@ startBtn.addEventListener("click", () => {
     return;
   }
 
-  //document.querySelector("eligibility-quiz").textContent =
-  //    `Welcome, ${playerName}! Eligibility Quiz`;
-
-  //showPopup("Welcome", `Welcome, ${playerName}! Let's start the quiz.`, () => {
-  //    console.log(`ok clicked, startScreen: ${startScreen.id}, quizScreen: ${quizScreen.id}`);
-  //});
   switchScreen(startScreen, quizScreen);
   loadEligibilityQuiz();
 });
@@ -350,110 +736,135 @@ startBtn.addEventListener("click", () => {
 /* ===========================
    LOAD ELIGIBILITY QUIZ
 =========================== */
+
 function loadEligibilityQuiz() {
-  eligibilityQuestionsContainer.innerHTML = "";
-  finalScore = 0;
-  currentQuestionIndex = 0;
+    // FULL RESET
+    eligibilityQuestionsContainer.innerHTML = "";
+    eligibilityScore = 0;
+    eligibilityWrongAnswers = 0;
+    currentQuestionIndex = 0;
+    scoreDisplay.textContent = eligibilityScore; // FIX: reset the visible score too
 
-  eligibilityQuiz.forEach((item, index) => {
-    const block = document.createElement("div");
-    block.classList.add("question");
-    if (index === 0) block.classList.add("active");
+    // Build quiz once
+    eligibilityQuiz.forEach((item, index) => {
+        const block = document.createElement("div");
+        block.classList.add("question");
+        if (index === 0) block.classList.add("active");
 
-    block.innerHTML = `
+        block.innerHTML = `
             <p><strong>Q${index + 1}:</strong> ${item.q}</p>
-            ${item.options.map((opt) => `<button class="quiz-option">${opt}</button>`).join("")}
+            ${item.options.map(opt => `<button class="quiz-option">${opt}</button>`).join("")}
             <button class="submit-btn">Submit Answer</button>
         `;
 
-    eligibilityQuestionsContainer.appendChild(block);
+        eligibilityQuestionsContainer.appendChild(block);
 
-    const options = block.querySelectorAll(".quiz-option");
-    const submitBtn = block.querySelector(".submit-btn");
+        const options = block.querySelectorAll(".quiz-option");
+        const submitBtn = block.querySelector(".submit-btn");
 
-    options.forEach((option) => {
-      option.addEventListener("click", () => {
-        options.forEach((btn) => btn.classList.remove("selected"));
-        option.classList.add("selected");
-      });
+        // Select option
+        options.forEach(option => {
+            option.addEventListener("click", () => {
+                options.forEach(btn => btn.classList.remove("selected"));
+                option.classList.add("selected");
+            });
+        });
+
+        // Submit answer
+        submitBtn.addEventListener("click", () => {
+            const selected = block.querySelector(".selected");
+
+            if (selected && selected.textContent === item.correct) {
+                eligibilityScore++;
+                playCorrect();
+          selected.style.background = "#026006";
+          selected.style.color = "#81d185";
+            } else {
+              playWrong();
+          selected.style.background = "#ed0b22";
+          selected.style.color = "#e1aeae";
+                eligibilityWrongAnswers++;
+            }
+
+            // Wrong answer limit check
+            if (eligibilityWrongAnswers > 4) {
+                showPopup(
+                    "Eligibility Quiz Failed",
+                    "You have exceeded the maximum number of wrong answers. Please try again.",
+                    () => restartEligibilityQuiz() // FIX: use the onOk callback instead of
+                                                    // manually re-cloning the button here
+                );
+                return;
+            }
+
+            scoreDisplay.textContent = eligibilityScore;
+
+            // Move to next question
+            block.classList.remove("active");
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < eligibilityQuiz.length) {
+                eligibilityQuestionsContainer.children[currentQuestionIndex].classList.add("active");
+            } else {
+                finishEligibilityQuiz();
+            }
+        });
     });
-
-    submitBtn.addEventListener("click", () => {
-      const selected = block.querySelector(".selected");
-      if (selected && selected.textContent === item.correct) finalScore++;
-
-      scoreDisplay.textContent = finalScore;
-
-      block.classList.remove("active");
-      currentQuestionIndex++;
-
-      if (currentQuestionIndex < eligibilityQuiz.length) {
-        eligibilityQuestionsContainer.children[
-          currentQuestionIndex
-        ].classList.add("active");
-      } else {
-        finishEligibilityQuiz();
-      }
-    });
-  });
-}
-//calculate eligibility score
-function calculateEligibilityScore() {
-  let finalScore = 0;
-  const selectedOptions = document.querySelectorAll(".quiz-option.selected");
-
-  selectedOptions.forEach((option) => {
-    if (option.dataset.correct === "true") {
-      finalScore++;
-    }
-  });
-
-  return finalScore;
 }
 
 /* ===========================
    FINISH ELIGIBILITY QUIZ
 =========================== */
-// finishEligibilityQuiz: switch immediately to main game and show popup (non-blocking)
+
 function finishEligibilityQuiz() {
-  console.log("Finishing quiz...");
-
-  finalScore = calculateEligibilityScore();
-  scoreDisplay.textContent = finalScore;
-
-  // Switch to main game immediately
-  switchScreen(quizScreen, mainGame);
-
-  // Show a non-blocking popup with the result
-  showPopup(`Quiz Completed! You are Eligible!`);
+    scoreDisplay.textContent = eligibilityScore;
+    
+    switchScreen(quizScreen, mainGame);
+    
+    showPopup(
+        "Quiz Completed!",
+        `You are Eligible! Your score is ${eligibilityScore}/${eligibilityQuiz.length}`
+    );
 }
 
-// Submit Quiz button: switch to main game right away when clicked
-submitQuiz.addEventListener("click", () => {
-  console.log("Submit clicked");
+/* ===========================
+   RESTART ELIGIBILITY QUIZ
+=========================== */
 
-  const finalScore = calculateEligibilityScore();
-  console.log("Score:", finalScore);
+function restartEligibilityQuiz() {
+    eligibilityScore = 0;
+    eligibilityWrongAnswers = 0;
+    currentQuestionIndex = 0;
 
-  // Update score display
-  scoreDisplay.textContent = finalScore;
+    switchScreen(quizScreen, startScreen);
 
-  // Immediately navigate to main game
-  switchScreen(quizScreen, mainGame);
-
-  // Optionally show the popup (does not block navigation)
-  showPopup(
-    "Quiz Completed You are Eligible!",
-    `Your score is ${finalScore}/${eligibilityQuiz.length}`,
-  );
-});
+    // FULL CLEAN RELOAD
+    loadEligibilityQuiz();
+}
 
 /* ===========================
    MAIN GAME SECTION SELECTOR
 =========================== */
+// Add click event listeners to section buttons
 sectionButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
-    currentSection = btn.dataset.section;
+    // small pulse effect
+    btn.animate(
+      [
+        { transform: "scale(1)", opacity: 1 },
+        { transform: "scale(0.98)", opacity: 0.98 },
+        { transform: "scale(1)", opacity: 1 },
+      ],
+      { duration: 260, easing: "cubic-bezier(.2,.9,.3,1)" },
+    );
+
+    btn.style.boxShadow = "0 18px 40px rgba(20,20,40,0.18)";
+    setTimeout(() => (btn.style.boxShadow = ""), 420);
+
+    const section = btn.dataset.section;
+    if (!section) return;
+
+    currentSection = section;
     currentSectionIndex = 0;
 
     quizContainer.innerHTML = "";
@@ -543,77 +954,26 @@ function showSectionSubmitButton(sectionScore, total) {
   document
     .getElementById("section-submit-btn")
     .addEventListener("click", () => {
-      switchScreen(mainGame, mainGame); // stays in main game
       quizContainer.innerHTML = "";
       gameContent.textContent = "";
       showPopup("Success", "Section completed! Choose another section.");
     });
 }
 
-// Add ripple/highlight on click and keep existing dataset.section behavior
-document.querySelectorAll(".section-btn").forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    // small pulse effect
-    btn.animate(
-      [
-        { transform: "scale(1)", opacity: 1 },
-        { transform: "scale(0.98)", opacity: 0.98 },
-        { transform: "scale(1)", opacity: 1 },
-      ],
-      { duration: 260, easing: "cubic-bezier(.2,.9,.3,1)" },
-    );
-
-    // optional: temporary outline to show selection
-    btn.style.boxShadow = "0 18px 40px rgba(20,20,40,0.18)";
-    setTimeout(() => (btn.style.boxShadow = ""), 420);
-
-    // preserve your existing behavior: set currentSection and load quiz
-    const section = btn.dataset.section;
-    if (section) {
-      currentSection = section;
-      currentSectionIndex = 0;
-      quizContainer.innerHTML = "";
-      gameContent.textContent = "";
-      loadSectionQuiz(currentSection);
-    }
-  });
-});
-
 //GAME OVER SCREEN
 function showGameOverScreen() {
   quizContainer.innerHTML = `
         <h2 style="color:#ff4444; text-shadow:0 0 10px red;">GAME OVER</h2>
         <p>You got more than 3 answers wrong.</p>
-        <button id="restart-btn">Restart Game</button>
+        <button id="restart-btn-inline">Restart Game</button>
     `;
 
-  document.getElementById("restart-btn").addEventListener("click", () => {
-    // Reset section UI
+  document.getElementById("restart-btn-inline").addEventListener("click", () => {
     quizContainer.innerHTML = "";
     gameContent.textContent = "";
-
-    // Navigate back to main game screen
-    switchScreen(mainGame, mainGame);
-
     showPopup("Restarted", "You can choose a new section now!");
   });
 }
-
-function showGameOver() {
-  gameOverScreen.classList.remove("hidden");
-}
-
-//RESTART BUTTON FUNCTIONALITY
-restartBtn.addEventListener("click", () => {
-  gameOverScreen.classList.add("hidden");
-
-  // reset quiz UI if needed
-  // e.g. quizContainer.innerHTML = "";
-  // gameContent.textContent = "";
-
-  // navigate back to main game
-  switchScreen(quizScreen, mainGameScreen);
-});
 
 /* ===========================
    AUDIO CONTROL
@@ -626,9 +986,6 @@ volumeIcon.addEventListener("click", () => {
     ? "./assets/icons/audioOff.png"
     : "./assets/icons/audioOn.png";
 });
-
-const correctSound = new Audio("./assets/music/Correct answer.wav");
-const incorrectSound = new Audio("./assets/music/Wrong answer.wav");
 
 // Play correct and wrong answer sounds
 function playCorrect() {
